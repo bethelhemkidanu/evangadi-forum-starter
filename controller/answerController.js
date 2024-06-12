@@ -19,7 +19,7 @@ async function postAnswer(req, res) {
       [userid, questionid, answer]
     );
 
-    // Return success message if answer is posted successfully
+
     return res.status(201).json({ msg: "Your answer has been posted" });
   } catch (error) {
     console.error("Error posting answer:", error.message);
@@ -31,7 +31,7 @@ async function getAnswer(req, res) {
   const { questionid } = req.params;
 
   try {
-    // Query the database to retrieve answers for the specified question
+    // Query the database to get answers for the specified question
     const [answers] = await dbConnection.query(
       "SELECT answers.answer , users.username FROM answers INNER JOIN users ON answers.userid = users.userid WHERE questionid =?",
       [questionid]
@@ -44,33 +44,6 @@ async function getAnswer(req, res) {
     return res.status(500).json({ msg: "Something went wrong" });
   }
 }
-// async function getAnswer(req, res)  {
-//   const { questionid } = req.params;
-//   const query = `
-//     SELECT 
-//       questions.questionid, 
-//       questions.title, 
-//       questions.description, 
-//       users.username,
-//       answers.answer,
-//       questions.id
-//     FROM 
-//       questions
-//     JOIN 
-//       users ON questions.userid = users.userid
-//     LEFT JOIN 
-//       answers ON answers.questionid = questions.questionid
-//     WHERE 
-//       questions.questionid = ?
-//     ORDER BY 
-//    questions.id DESC;
-//   `;
-//   try {
-//     const [results] = await dbConnection.query(query, [questionid]);
-//     res.json(results);
-//   } catch (error) {
-//     res.status(500).send(error);
-//   }
-// };
+
 
 module.exports = { postAnswer, getAnswer };

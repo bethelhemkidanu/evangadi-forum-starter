@@ -32,29 +32,7 @@ app.use("/api/questions", authMiddleware, questionsRoute);
 app.use("/api/answers", authMiddleware, answersRoute);
 
 
-// app.get("/api/data/combined", async (req, res) => {
-//   const query = `SELECT 
-//     questions.questionid, 
-//     questions.tittle, 
-//     questions.description, 
-//     users.username,
-//     questions.id
-// FROM 
-//     questions
-// INNER JOIN 
-//     users ON questions.userid = users.userid
-  
-//     ORDER BY 
-//     questions.id DESC;
-//     `;
 
-//   try {
-//     const [results] = await dbConnection.query(query);
-//     res.send(results);
-//   } catch (error) {
-//     res.status(500).send(error);
-//   }
-// });
 
 async function start(){
   try {

@@ -17,13 +17,13 @@ async function postQuestion(req, res) {
   }
 
   try {
-    // Insert the new question into the database
+    // Insert  into the database
     const result = await dbConnection.query(
       "INSERT INTO questions (questionid, userid, tittle, description, tag) VALUES (?, ?, ?, ?, ?)",
       [questionid, req.user.userid, tittle, description, tag]
     );
 
-    // Return a success response with the generated question ID
+    // 
     return res
       .status(StatusCodes.CREATED)
       .json({ msg: "your question has posted", questionid });
@@ -49,23 +49,7 @@ async function getQuestion(req, res) {
 
   try {
     const [question] = await dbConnection.query("SELECT tittle, description from questions where questionid = ?  ",[questionid]
-      // "SELECT questions.question , users.username FROM questions INNER JOIN users ON questions.userid = users.userid WHERE questionid = ?",
-      // [questionid]
       
-//       `SELECT 
-//     questions.questionid, 
-//     questions.title, 
-//     questions.description, 
-//     users.username,
-//     questions.id
-// FROM 
-//     questions
-// INNER JOIN 
-//     users ON questions.userid = users.userid
-  
-//     ORDER BY 
-//     questions.id DESC;
-//     `
     );
 
     if (question.length === 0) {
@@ -79,7 +63,7 @@ async function getQuestion(req, res) {
   } catch (error) {
     console.error("Error retrieving question:", error.message);
 
-    // Handle any errors during the query
+   
     return res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
       .json({ msg: "Something went wrong" });
@@ -90,7 +74,7 @@ async function getQuestion(req, res) {
 async function getAllQuestions(req, res) {
   try {
     const [questions] = await dbConnection.query(
-      // "SELECT questionid, tittle, username INNER JOIN users ON FROM questions"
+      
       "SELECT q.questionid, q.tittle, u.username FROM questions q JOIN users u ON q.userid = u.userid"
     );
 
@@ -99,7 +83,7 @@ async function getAllQuestions(req, res) {
   } catch (error) {
     console.error("Error retrieving questions:", error.message);
 
-    // Handle any errors during the query
+    //
     return res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
       .json({ msg: "Something went wrong" });
