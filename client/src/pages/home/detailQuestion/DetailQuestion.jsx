@@ -7,6 +7,8 @@ import classes from "../detailQuestion/detailQuestion.module.css";
 function DetailQuestion() {
   const [question, setQuestion] = useState(null);
   const [values, setValues] = useState();
+  const [isloading, setIsloading] = useState(false);
+  
   const { questionid } = useParams();
   const token = localStorage.getItem("token");
   useEffect(() => {}, [question]);
@@ -46,6 +48,7 @@ function DetailQuestion() {
     }
 
     try {
+      setIsloading(true)
       await axios.post(
         `/answers/all-answer/${questionid}`,
         {
@@ -60,13 +63,15 @@ function DetailQuestion() {
       );
       // const token = localStorage.getItem("token");
       alert("Your answer has been posted");
-      setTimeout(() => {
-        window.location.reload();
-      }, 1000);
+      // setTimeout(() => {
+      //   window.location.reload();
+      // }, 1000);
       //empty answer
       answerName.current.value = "";
+      setIsloading(false)
     } catch (error) {
       console.log(error);
+      setIsloading(false);
     }
   }
   async function getAllAnswer() {
@@ -77,6 +82,7 @@ function DetailQuestion() {
         },
       });
       setValues(respond.data);
+    
     } catch (error) {
       console.error("Error with question details:", error);
       if (error.response) {
@@ -87,7 +93,8 @@ function DetailQuestion() {
   }
   useEffect(() => {
     getAllAnswer();
-  }, []);
+    
+  }, [isloading]);
   return (
     <div className={classes.container}>
       <h1 className={classes.heading}>Question</h1>
@@ -126,7 +133,7 @@ function DetailQuestion() {
         ></textarea>
         <br />
         <button type="submit" className={classes.submit_button}>
-          Post Answer
+         {isloading ?"posting...":" Post Answer"}
         </button>
       </form>
     </div>

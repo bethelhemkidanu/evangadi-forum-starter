@@ -33,7 +33,7 @@ const Home = () => {
   }, [setQuestion]);
 
   return (
-    <>
+    <section className={classes.container_wrapper}>
       <div className={classes.flex}>
         <div>
           <Link to={"/question"}> Ask Question</Link>
@@ -64,7 +64,7 @@ const Home = () => {
           </div>
         ))}
       </div>
-    </>
+    </section>
   );
 };
 

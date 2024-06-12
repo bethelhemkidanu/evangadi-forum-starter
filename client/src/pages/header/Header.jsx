@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import classes from "./header.module.css";
+import { AppState } from "../../App";
 
 function Header() {
   const location = useLocation();
   const navigate = useNavigate();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-
+  const { user } = useContext(AppState);
   useEffect(() => {
     // Check if the user is authenticated
     const token = localStorage.getItem("token");
@@ -34,7 +35,7 @@ function Header() {
           Sign In
         </Link>
       );
-    } else if (isAuthenticated) {
+    } else if (user) {
       return (
         <button
           onClick={handleLogout}

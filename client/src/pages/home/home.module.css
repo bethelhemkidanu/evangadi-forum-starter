@@ -13,6 +13,7 @@
 .container {
   padding: 10px;
   text-align: right;
+  /* width: 100%; */
 }
 
 .flex a {
@@ -30,6 +31,7 @@
 }
 
 .questions {
+  margin: auto 30px;
   padding: 20px;
   width: 90%;
   background-color: #ffffff;
@@ -83,4 +85,25 @@
 
 .questionItem:hover .icon {
   transform: translateX(5px);
+}
+@media (max-width: 480px) {
+  body {
+    padding: 10px;
+  }
+
+  .flex {
+    padding: 15px;
+  }
+
+  .questions {
+    padding: 15px;
+  }
+
+  .questionItem {
+    padding: 10px;
+  }
+
+  .questionItem .title {
+    font-size: 1em;
+  }
 }

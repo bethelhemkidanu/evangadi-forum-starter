@@ -39,6 +39,7 @@
   color: #007BFF; 
 }
 .link  {
+  border: none;
   background-color: #007bff;
   padding: 10px 20px;
   color: #fff !important;
@@ -49,9 +50,44 @@
 .link:hover {
   background-color: #0056b3;
 }
-/* @media screen and (max-width: 760px){ 
+@media (max-width: 768px) {
   .flex {
-    display: inline;
-    columns: 1;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 10px;
+    height: auto;
   }
-} */
+
+  .left_side {
+    padding-left: 0;
+    margin-bottom: 10px;
+  }
+
+  .right_side {
+    width: 100%;
+    justify-content: space-between;
+    padding-right: 0;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .right_side a, .link {
+    font-size: 14px;
+    padding: 8px 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .flex {
+    padding: 10px 5px;
+  }
+
+  .right_side {
+    gap: 5px;
+  }
+
+  .right_side a, .link {
+    font-size: 12px;
+    padding: 5px 10px;
+  }
+}

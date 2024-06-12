@@ -12,7 +12,7 @@ const Footer = () => {
           src="https://www.evangadi.com/themes/humans/assets/hammerlook/img/misc/evangadi-logo-black.png"
           alt="evangadi logo"
         />
-        <div className={classes.link}>
+        <div className={classes.icon_links}>
           <FaFacebook />
           <FaInstagram />
           <FaYoutube />

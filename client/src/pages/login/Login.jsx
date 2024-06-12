@@ -42,7 +42,8 @@ const Login = () => {
           <h4>Login to your account</h4>
 
           <p>
-            Don't have account<Link>Create a new account</Link>
+            Don't have account 
+            <Link className={classes.link_color}> Create a new account</Link>
           </p>
           <div className={classes.input_group}>
             <input ref={emailDom} type="email" placeholder="email" />
@@ -55,7 +56,10 @@ const Login = () => {
             Login
           </button>
         </form>
-        <Link to={"/register"}> Create an account</Link>
+        <Link to={"/register"} className={classes.link_color}>
+          {" "}
+          Create an account
+        </Link>
       </div>
       <div className={classes.right_container}>
         <Link

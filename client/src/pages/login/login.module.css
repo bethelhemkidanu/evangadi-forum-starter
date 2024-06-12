@@ -23,12 +23,15 @@ body {
   width: 100%;
   max-width: 400px;
   transition: transform 0.2s;
+  margin-left: 30px;
 }
 
 .login_container:hover {
   transform: scale(1.05);
 }
-
+.link_color {
+  color: #d1491e;
+}
 .form h4 {
   margin-bottom: 20px;
   color: #333;
