@@ -22,10 +22,12 @@ function DetailQuestion() {
   const tittleName = useRef();
   const descriptionName = useRef();
   const { questionid } = useParams();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [notification, setNotification] = useState("");
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [deleteQuestionId, setDeleteQuestionId] = useState(null);
+   const [deleteAnswerId, setDeleteAnswerId] = useState(null);
+     const [message, setMessage] = useState("");
   const token = localStorage.getItem("token");
   useEffect(() => {}, [question]);
   // useEffect(() => {
@@ -52,25 +54,24 @@ function DetailQuestion() {
   // }, [questionid]);
 
   // Ref for the textarea
-  
-   async function QuestionDetails() {
-     try {
-       const response = await axios.get(`/questions/question/${questionid}`, {
-         headers: {
-           Authorization: "Bearer " + localStorage.getItem("token"),
-         },
-       });
-       
-       setQuestion(response.data.question);
-        // setResponses(response.data.responses);
-     } catch (error) {
-       console.log(error.response);
-     }
-   };
-   useEffect(() => {
-     QuestionDetails();
-   }, [setQuestion]);
 
+  async function QuestionDetails() {
+    try {
+      const response = await axios.get(`/questions/question/${questionid}`, {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("token"),
+        },
+      });
+
+      setQuestion(response.data.question);
+      // setResponses(response.data.responses);
+    } catch (error) {
+      console.log(error.response);
+    }
+  }
+  useEffect(() => {
+    QuestionDetails();
+  }, [setQuestion]);
 
 
   const answerName = useRef();
@@ -98,7 +99,13 @@ function DetailQuestion() {
           },
         }
       );
-      alert("Your answer has been posted");
+      setMessage("Your answer has been posted");
+
+      // Update the responses state with the new answer
+      setResponses((prevResponses) => [
+        ...prevResponses,
+        // responses.data?.answer, // Assuming response.data contains the posted answer
+      ]);
 
       //empty answer
       answerName.current.value = "";
@@ -131,27 +138,62 @@ function DetailQuestion() {
   }, []);
   // [isloading, isEditMode, answerIdOnEdit, responses];
 
-  // delete answer
+  // delete answer and question conformation
+ 
 
-  //   const deleteAnswer = async (questionid,answerid) => {
-  //   try {
-  //     const { data } = await axios.delete(
-  //       `/answers/all-answer/${questionid}/${answerid}`,
-  //       {
-  //         headers: {
-  //           Authorization: "Bearer " + localStorage.getItem("token"),
-  //         },
-  //       }
-  //     );
-  //     console.log(data);
-  //     getAllAnswer();
-  //     setValues((prevQuestions) =>
-  //       prevQuestions.filter((value) => value.answerid !== answerid)
-  //     );
-  //   } catch (error) {
-  //     console.error("Error deleting answer: ", error.response || error.message);
-  //   }
-  // };
+  const confirmDeleteQuestion = (questionid) => {
+    setDeleteQuestionId(questionid);
+    setShowConfirmModal(true);
+  };
+
+  const handleConfirmDeleteQuestion = async () => {
+    setShowConfirmModal(false);
+    if (deleteQuestionId) {
+      await deleteQuestions(deleteQuestionId);
+      setDeleteQuestionId(null);
+    }
+  };
+
+  const confirmDeleteAnswer = (answerid) => {
+    setDeleteAnswerId(answerid);
+    setShowConfirmModal(true);
+  };
+
+  const handleConfirmDeleteAnswer = async () => {
+    setShowConfirmModal(false);
+    if (deleteAnswerId) {
+      await deleteAnswer(deleteAnswerId);
+      setDeleteAnswerId(null);
+    }
+  };
+
+  const handleCancelDelete = () => {
+    setShowConfirmModal(false);
+    setDeleteQuestionId(null);
+    setDeleteAnswerId(null);
+  };
+
+  const deleteQuestions = async (questionid) => {
+    try {
+      const { data } = await axios.delete(`/questions/delete/${questionid}`, {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("token"),
+        },
+      });
+
+      console.log(data);
+      setNotification("You have deleted your question");
+      setTimeout(() => {
+        setQuestion((prevQuestions) =>
+          prevQuestions.filter((q) => q.questionid !== questionid)
+        );
+        navigate("/");
+      }, 2000); // Navigate after 2 seconds
+    } catch (error) {
+      console.log("Error deleting question:", error.response || error.message);
+    }
+  };
+
   const deleteAnswer = async (answerid) => {
     console.log("answerid==>", answerid);
     try {
@@ -160,12 +202,19 @@ function DetailQuestion() {
           Authorization: "Bearer " + localStorage.getItem("token"),
         },
       });
-      
+
+      setNotification("You have deleted your answer");
+      setTimeout(() => {
+        setResponses((prevResponses) =>
+          prevResponses.filter((response) => response.answerid !== answerid)
+        );
+      }, 1000); //  delay
     } catch (error) {
       console.error("Error deleting answer: ", error.response || error.message);
     }
   };
 
+  
 
   //edit
   const editAnswer = async (answerid, answer) => {
@@ -208,52 +257,8 @@ function DetailQuestion() {
     }
   }
 
-  /// delete
-
+ 
   
-   const confirmDeleteQuestion = (questionid) => {
-     setDeleteQuestionId(questionid);
-     setShowConfirmModal(true);
-   };
-   const handleConfirmDelete = async () => {
-     setShowConfirmModal(false);
-     if (deleteQuestionId) {
-       await deleteQuestions(deleteQuestionId);
-       setDeleteQuestionId(null);
-     }
-   };
-
-   const handleCancelDelete = () => {
-     setShowConfirmModal(false);
-     setDeleteQuestionId(null);
-   };
-     
-     const deleteQuestions = async (questionid) => {
-       try {
-         const { data } = await axios.delete(
-           `/questions/delete/${questionid}`,
-           {
-             headers: {
-               Authorization: "Bearer " + localStorage.getItem("token"),
-             },
-           }
-         );
-
-         console.log(data);
-         setNotification("You have deleted your question");
-         setTimeout(() => {
-           setQuestion((prevQuestions) =>
-             prevQuestions.filter((q) => q.questionid !== questionid)
-           );
-           navigate("/");
-         }, 1000); // Navigate after 2 seconds
-       } catch (error) {
-         console.log(
-           "Error deleting question:",
-           error.response || error.message
-         );
-       }
-     };
   // edit question
 
   const editQuestion = async (questionid, tittle, description) => {
@@ -265,8 +270,8 @@ function DetailQuestion() {
     // descriptionName.current.value = description;
   };
 
-  // update question
-
+  // update question //
+ // //////////////// //
   useEffect(() => {
     if (isEditModeQuestion) {
       tittleName.current.value = tittleValue;
@@ -316,13 +321,25 @@ function DetailQuestion() {
   };
   return (
     <div className={classes.container}>
+      {notification && (
+        <div className={classes.notification}>{notification}</div>
+      )}
       {showConfirmModal && (
         <ConfirmModal
-          message="Are you sure you want to delete this question?"
-          onConfirm={handleConfirmDelete}
+          message={
+            deleteQuestionId
+              ? "Are you sure you want to delete this question?"
+              : "Are you sure you want to delete this answer?"
+          }
+          onConfirm={
+            deleteQuestionId
+              ? handleConfirmDeleteQuestion
+              : handleConfirmDeleteAnswer
+          }
           onCancel={handleCancelDelete}
         />
       )}
+
       <h1 className={classes.heading}>Question</h1>
       {question ? (
         <div className={classes.question_section}>
@@ -347,6 +364,7 @@ function DetailQuestion() {
               <div onClick={(e) => e.stopPropagation()}>
                 <FaTrashAlt
                   onClick={() => confirmDeleteQuestion(question.questionid)}
+                  // onClick={() => confirmDeleteQuestion(question.questionid)}
                   style={{ cursor: "pointer", color: "red", fontSize: "20px" }}
                 />
                 <CiEdit
@@ -419,8 +437,7 @@ function DetailQuestion() {
               {value.username == user.username && (
                 <div onClick={(e) => e.stopPropagation()}>
                   <FaTrashAlt
-                    // onClick={() => confirmDeleteQuestion(question.questionid)}
-                    onClick={() => deleteAnswer(value.answerid)}
+                    onClick={() => confirmDeleteAnswer(value.answerid)}
                     style={{
                       cursor: "pointer",
                       color: "red",
@@ -444,7 +461,7 @@ function DetailQuestion() {
           //  <div>{values.}</div>
         ))}
       </div>
-
+      {message && <div className="message">{message}</div>}
       <form
         onSubmit={isEditMode ? updateAnswer : sendAnswer}
         className={classes.answer_form}
