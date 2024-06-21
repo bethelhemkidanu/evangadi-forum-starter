@@ -1,6 +1,6 @@
 import React, { useRef } from "react";
 import axios from "../../AxiosConfig";
-import classes from './question.module.css'
+import classes from "./question.module.css";
 function Question() {
   const tittleName = useRef();
   const descriptionName = useRef();
@@ -16,8 +16,7 @@ function Question() {
     }
 
     try {
-      
-      const token = localStorage.getItem("token"); 
+      const token = localStorage.getItem("token");
 
       const config = {
         headers: {

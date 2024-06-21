@@ -19,6 +19,8 @@
   border-radius: 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
 }
 
 .question_title {
@@ -38,6 +40,7 @@
   margin-top: 10px;
   font-size: 1em;
   color: #666;
+  margin-bottom: 30px;
 }
 
 .loading {
@@ -55,6 +58,8 @@
   border-radius: 5px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
 }
 
 .answer_username {

@@ -26,7 +26,12 @@ const Login = () => {
       });
       alert("login successfully");
       localStorage.setItem('token', data.token)
-      navigate("/"); 
+      // navigate("/"); 
+      setTimeout(() => {
+        navigate("/");
+        window.location.reload();
+        setProcess(false);
+      }, 2000);
       console.log(data)
     } catch (error) {
       alert(error?.response?.data?.msg);
