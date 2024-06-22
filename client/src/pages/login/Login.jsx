@@ -47,7 +47,7 @@ const Login = () => {
           <h4>Login to your account</h4>
 
           <p>
-            Don't have account 
+            Don't have account
             <Link className={classes.link_color}> Create a new account</Link>
           </p>
           <div className={classes.input_group}>
@@ -60,9 +60,10 @@ const Login = () => {
           <button type="submit" className={classes.login_button}>
             Login
           </button>
+          <br />
+          <br />
         </form>
         <Link to={"/register"} className={classes.link_color}>
-          {" "}
           Create an account
         </Link>
       </div>
@@ -74,19 +75,19 @@ const Login = () => {
         >
           About
         </Link>
-        <h2>Evangadi Networks Q&A </h2>
+        <h1>Evangadi Networks Q&A </h1>
         <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua.
+          No matter what stage of life you are in, whether you’re just starting
+          elementary school or being promoted to CEO of a Fortune 500 company,
+          you have much to offer to those who are trying to follow in your
+          footsteps.
         </p>
         <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua.
+          Wheather you are willing to share your knowledge or you are just
+          looking to meet mentors of your own, please start by joining the
+          network here.
         </p>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua.
-        </p>
+        
         <div className={classes.link}>
           <Link to={"/aboutus"} className={classes.link_bottom}>
             HOW IT WORKS

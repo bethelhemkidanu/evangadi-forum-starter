@@ -62,7 +62,11 @@ body {
   cursor: pointer;
   transition: background-color 0.3s;
 }
-
+h2 {
+  color: #9f2c00;
+  font-weight: 900;
+  font-size: xx-large;
+}
 .submit_button:hover {
   background-color: #000080;
 }

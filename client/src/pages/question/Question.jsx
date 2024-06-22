@@ -33,8 +33,8 @@ function Question() {
         },
         config
       );
-
-      alert("Your question has been posted");
+     window.location.reload();
+      // alert("Your question has been posted");
     } catch (error) {
       console.log(error);
     }

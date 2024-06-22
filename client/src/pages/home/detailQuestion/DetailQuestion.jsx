@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useRef, useContext } from "react";
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  useContext,
+  useReducer,
+} from "react";
 import { FaHandPointRight } from "react-icons/fa";
 import axios from "../../../AxiosConfig";
 import { useNavigate, useParams } from "react-router-dom";
@@ -26,8 +32,9 @@ function DetailQuestion() {
   const [notification, setNotification] = useState("");
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [deleteQuestionId, setDeleteQuestionId] = useState(null);
-   const [deleteAnswerId, setDeleteAnswerId] = useState(null);
-     const [message, setMessage] = useState("");
+  const [deleteAnswerId, setDeleteAnswerId] = useState(null);
+  const [message, setMessage] = useState("");
+  const [render, forceUpdate] = useReducer((x) => x + 1);
   const token = localStorage.getItem("token");
   useEffect(() => {}, [question]);
   // useEffect(() => {
@@ -73,7 +80,6 @@ function DetailQuestion() {
     QuestionDetails();
   }, [setQuestion]);
 
-
   const answerName = useRef();
 
   async function sendAnswer(e) {
@@ -99,17 +105,16 @@ function DetailQuestion() {
           },
         }
       );
+      // forceUpdate();
       setMessage("Your answer has been posted");
 
       // Update the responses state with the new answer
-      setResponses((prevResponses) => [
-        ...prevResponses,
-        // responses.data?.answer, // Assuming response.data contains the posted answer
-      ]);
+      setResponses((prevResponses) => [...prevResponses]);
 
       //empty answer
       answerName.current.value = "";
       setIsloading(false);
+      window.location.reload();
     } catch (error) {
       console.log(error);
       setIsloading(false);
@@ -139,7 +144,6 @@ function DetailQuestion() {
   // [isloading, isEditMode, answerIdOnEdit, responses];
 
   // delete answer and question conformation
- 
 
   const confirmDeleteQuestion = (questionid) => {
     setDeleteQuestionId(questionid);
@@ -188,7 +192,7 @@ function DetailQuestion() {
           prevQuestions.filter((q) => q.questionid !== questionid)
         );
         navigate("/");
-      }, 2000); // Navigate after 2 seconds
+      }, 1000); // Navigate after 2 seconds
     } catch (error) {
       console.log("Error deleting question:", error.response || error.message);
     }
@@ -214,8 +218,6 @@ function DetailQuestion() {
     }
   };
 
-  
-
   //edit
   const editAnswer = async (answerid, answer) => {
     setIsEditMode(true);
@@ -227,7 +229,8 @@ function DetailQuestion() {
     const answerValue = answerName.current.value;
 
     if (!answerValue) {
-      alert("Please provide all required information");
+      // alert("Please provide all required information");
+      setNotification("Please provide all required information");
       return;
     }
 
@@ -244,21 +247,21 @@ function DetailQuestion() {
           },
         }
       );
-      alert("Your answer has been updated");
+       setNotification("Your answer has been updated");
+      // alert("Your answer has been updated");
 
       //empty answer
       answerName.current.value = "";
       setIsloading(false);
       setIsEditMode(false);
       // setAnswerIdOnEdit(null)
+       window.location.reload();
     } catch (error) {
       console.log(error);
       setIsloading(false);
     }
   }
 
- 
-  
   // edit question
 
   const editQuestion = async (questionid, tittle, description) => {
@@ -271,7 +274,14 @@ function DetailQuestion() {
   };
 
   // update question //
- // //////////////// //
+  // //////////////// //
+  ///
+  const handleClickOutside = (event) => {
+    if (event.target.classList.contains(classes.editQuestion)) {
+      setIsEditModeQuestion(false);
+    }
+  };
+  // update question //
   useEffect(() => {
     if (isEditModeQuestion) {
       tittleName.current.value = tittleValue;
@@ -301,28 +311,39 @@ function DetailQuestion() {
           },
         }
       );
-      alert("Your question has been updated");
-
+      // alert("Your question has been updated");
+    setNotification("Your answer has been updated");
       // Reset form
       setTittleValue("");
       setDescriptionValue("");
       setIsloading(false);
       setIsEditModeQuestion(false);
       // Refresh question details
+     
       setQuestion({
         ...question,
         tittle: tittleValue,
         description: descriptionValue,
-      });
+        
+      })
+   
     } catch (error) {
       console.error(error);
       setIsloading(false);
     }
   };
+  // delete notification
+  const handleClickOut = (event) => {
+    if (event.target.classList.contains(classes.notification_main)) {
+      setNotification(false);
+    }
+  };
   return (
     <div className={classes.container}>
       {notification && (
-        <div className={classes.notification}>{notification}</div>
+        <div onClick={handleClickOut} className={classes.notification_main}>
+          <div className={classes.notification}>{notification}</div>
+        </div>
       )}
       {showConfirmModal && (
         <ConfirmModal
@@ -388,7 +409,7 @@ function DetailQuestion() {
         <p className={classes.loading}>Loading question details...</p>
       )}
       {/* update question  */}
-      {isEditModeQuestion && (
+      {/* {isEditModeQuestion && (
         <form onSubmit={updateQuestion} className={classes.form}>
           <h2 className={classes.form_heading}>Update Your Question</h2>
           <input
@@ -419,6 +440,36 @@ function DetailQuestion() {
             {isloading ? "Updating..." : "update Question"}
           </button>
         </form>
+      )} */}
+      {isEditModeQuestion && (
+        <div className={classes.editQuestion} onClick={handleClickOutside}>
+          {" "}
+          <form onSubmit={updateQuestion} className={classes.formedit}>
+            <h2 className={classes.form_title}>Update Your Question</h2>
+            <input
+              ref={tittleName}
+              type="text"
+              placeholder="Title"
+              className={classes.tittle}
+              value={tittleValue}
+              onChange={(e) => setTittleValue(e.target.value)}
+            />
+            <textarea
+              ref={descriptionName}
+              placeholder="Enter description"
+              className={classes.Question_Des}
+              value={descriptionValue}
+              onChange={(e) => setDescriptionValue(e.target.value)}
+            ></textarea>
+            <button
+              type="submit"
+              className={classes.button}
+              disabled={isloading}
+            >
+              {isloading ? "Updating..." : "Post Question"}
+            </button>
+          </form>
+        </div>
       )}
       <br />
       <br />

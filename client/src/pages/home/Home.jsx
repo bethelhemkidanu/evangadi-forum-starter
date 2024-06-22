@@ -5,7 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import classes from "./home.module.css";
 import { FaRegUserCircle, FaAngleRight } from "react-icons/fa";
 import Highlighter from "react-highlight-words";
-
+import image from "../../assets/images/icons8-user-64 (1).png";
 
 const Home = () => {
   const { user } = useContext(AppState);
@@ -76,47 +76,7 @@ const Home = () => {
     e.preventDefault();
     searchQuestion(); // Trigger the search
   };
-  /// search
-  // async function searchQuestion(){
-  //   try{
-  //     const info =await axios.post(`/questions/quesearch`,{
-  //       stringQuery:val
-  //     },{ headers:{
-  //       Authorization: 'Bearer ' + token,}
-  //     })
-  //     setSearch(info.data)
-  //   }
-  //   catch (error){
-  //     console.log(error);
-  //   }
-  // }
-  // Function to handle the search request
-  // const searchQuestion = async () => {
-  //   try {
-  //     const info = await axios.post(
-  //       "/questions/quesearch",
-  //       { stringQuery: val },
-  //       {
-  //         headers: {
-  //           Authorization: "Bearer " + token,
-  //         },
-  //       }
-  //     );
-  //     setSearchResults(info.data); // Update the state with the search results
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // }
-  // Handle input change
-  // const handleInputChange = (e) => {
-  //   setVal(e.target.value);
-  // };
-
-  // // Handle form submit
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
-  //   searchQuestion(); // Trigger the search
-  // };
+ 
   return (
     <section className={classes.container_wrapper}>
       <div className={classes.flex}>
@@ -151,8 +111,8 @@ const Home = () => {
               className={classes.questionItem}
             >
               <div>
-                <FaRegUserCircle className={classes.user_icon} />
-
+                {/* <FaRegUserCircle className={classes.user_icon} /> */}
+                <img src={image} width={60} alt="user icon" />
                 <p>{q.username}</p>
               </div>
               <Highlighter
